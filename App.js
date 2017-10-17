@@ -4,7 +4,7 @@ import {
   StackNavigator,
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { List, ListItem, CheckBox } from "react-native-elements";
 import AddContacts from "./AddContacts.js";
 
 const details = new ListView.DataSource ({rowHasChanged: (row1, row2) => row1 != row2});
@@ -14,7 +14,7 @@ export class App extends React.Component {
     super(props);
 
     this.state = {
-      dataSource: details.cloneWithRows([
+      /*dataSource: details.cloneWithRows([
         {
               name: "Peter Parker",
               number: "213123123213 "
@@ -35,7 +35,7 @@ export class App extends React.Component {
               name: "Mary Jane",
               number: "213123123213 "
             },
-      ]),
+      ]),*/
       loading: false,
       data: [],
       page: 1,
@@ -123,6 +123,7 @@ export class App extends React.Component {
     );
   };
   componentDidMount(){
+    this.showContactListAsync().then(response => this.setState({data: response.data}));
     this.makeRemoteRequest();
   }
 
@@ -130,12 +131,12 @@ makeRemoteRequest(){
   const {page, seed} = this.state;
 
 }
-async showFirstContactAsync() {
+async showContactListAsync() {
   // Ask for permission to query contacts.
   const permission = await Expo.Permissions.askAsync(Expo.Permissions.CONTACTS);
   if (permission.status !== 'granted') {
     // Permission was denied...
-    return (contacts);
+    return;
   }
   const contacts = await Expo.Contacts.getContactsAsync({
     fields: [
@@ -144,28 +145,31 @@ async showFirstContactAsync() {
     pageSize: 10,
     pageOffset: 0,
   });
+  return contacts;
+}
+
+displayNumbers = (phoneNumber) => {
+  console.log(phoneNumber);
+  console.log("gjjhvjhv");
+  return (
+    {phoneNumber}
+  );
 }
 
   render() {
-
-  //  data = [{}];
+   //data = [{}];
+   console.log(this.state.data);
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-        <FlatList
-          data= {this.state.data}
-          renderItem= {({ item}) => (<ListView
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow}/>)}
-          keyExtractor={data=> data.phoneNumbers}
-          ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
-        />
-      </List>
+      <View style={{backgroundColor: 'brown', flex:1, marginTop: 10 }}>
+        <Text style={{flex:1, color: "black", fontSize: 40}}>
+          {this.state.data.map(person =>{this.displayNumbers(person.name)})}
+        </Text>
+      </View>
+
+      /*<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+
+
+      </List>*/
     );
   }
 }
@@ -198,3 +202,19 @@ const styles = StyleSheet.create({
     marginTop: 5
   }
 });
+
+//<FlatList
+
+/*  renderItem= {({item}) => (<ListView
+      dataSource={item.phoneNumbers}
+      renderRow={this.renderRow}/>)}
+
+  keyExtractor={data=> data.phoneNumbers}
+  ItemSeparatorComponent={this.renderSeparator}
+  ListHeaderComponent={this.renderHeader}
+  ListFooterComponent={this.renderFooter}
+  onRefresh={this.handleRefresh}
+  refreshing={this.state.refreshing}
+  onEndReached={this.handleLoadMore}
+  onEndReachedThreshold={50}*/
+///>
