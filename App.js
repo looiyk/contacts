@@ -1,41 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button, ListView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button, ListView, TouchableHighlight } from 'react-native';
 import {
   StackNavigator,
 } from 'react-navigation';
+//import { connect } from react-redux;
 import { Ionicons } from '@expo/vector-icons';
 import { List, ListItem, CheckBox } from "react-native-elements";
 import AddContacts from "./AddContacts.js";
 
-const details = new ListView.DataSource ({rowHasChanged: (row1, row2) => row1 != row2});
-
+//const details = new ListView.DataSource ({rowHasChanged: (row1, row2) => row1 != row2});
+var realsuperheroes = [{name:"Batman", sex:"male"},{name:"Batman", sex:"male"}, {name:"Batman", sex:"male"}, {name:"Batman", sex:"male"}];
 export class App extends React.Component {
   constructor(props) {
     super(props);
-
+    var dataSource = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 != r2});
     this.state = {
-      /*dataSource: details.cloneWithRows([
-        {
-              name: "Peter Parker",
-              number: "213123123213 "
-            },
-            {
-              name: "May Parker",
-              number: "213123123213 "
-            },
-            {
-              name: "Harry Osbourne",
-              number: "213123123213 "
-            },
-            {
-              name: "Flint Marko",
-              number: "213123123213 "
-            },
-            {
-              name: "Mary Jane",
-              number: "213123123213 "
-            },
-      ]),*/
+      dataSource: dataSource.cloneWithRows(realsuperheroes),
       loading: false,
       data: [],
       page: 1,
@@ -45,12 +25,15 @@ export class App extends React.Component {
     }
   }
 
-  renderRow (rowData, SectionID){
+  renderRow (rowData, sectionID, rowID){
     return (
-      <View style={styles.renderRow}>
-        <Text>{rowData.name}</Text>
-        <Text>{rowData.number}</Text>
-      </View>
+      <TouchableHighlight underlayColor= "#dddddd" style={{height:44}}>
+        <View>
+          <Text style={{fontSize:20, color: "#000000"}} numberOfLines={1}>{rowData.name}</Text>
+          <Text style={{fontSize:15, color: "#000000"}} numberOfLines={1}>{rowData.sex}</Text>
+          <View style={{height:1, backgroundColor: "#dddddd"}}/>
+        </View>
+      </TouchableHighlight>
     );
   }
 
@@ -150,21 +133,41 @@ async showContactListAsync() {
 
 displayNumbers = (phoneNumber) => {
   console.log(phoneNumber);
-  console.log("gjjhvjhv");
+
   return (
+    <Text>
     {phoneNumber}
+    </Text>
   );
 }
 
   render() {
-   //data = [{}];
    console.log(this.state.data);
     return (
-      <View style={{backgroundColor: 'brown', flex:1, marginTop: 10 }}>
-        <Text style={{flex:1, color: "black", fontSize: 40}}>
-          {this.state.data.map(person =>{this.displayNumbers(person.name)})}
-        </Text>
-      </View>
+
+      <ListView dataSource={this.state.dataSource} renderRow={this.renderRow.bind(this)}>
+
+      </ListView>
+      /*<FlatList
+        data = {this.state.dataSource}
+          renderItem = {({item})=>(
+            <ListView dataSource={this.state.dataSource} renderRow={this.renderRow.bind(this)}>
+
+            </ListView>
+          )}
+          keyExtractor={data=> data.phoneNumbers}
+          ItemSeparatorComponent={this.renderSeparator}
+          ListHeaderComponent={this.renderHeader}
+          ListFooterComponent={this.renderFooter}
+          onRefresh={this.handleRefresh}
+          refreshing={this.state.refreshing}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={50}
+        />
+*/
+      /*<View style={{backgroundColor: 'brown', flex:1, marginTop: 10 }}>
+          {this.state.data.map(person => this.displayNumbers(person.name))}
+      </View>*/
 
       /*<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
 
@@ -199,22 +202,8 @@ const styles = StyleSheet.create({
   },
   renderRow: {
     borderWidth: 2,
-    marginTop: 5
+    marginTop: 5,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
-
-//<FlatList
-
-/*  renderItem= {({item}) => (<ListView
-      dataSource={item.phoneNumbers}
-      renderRow={this.renderRow}/>)}
-
-  keyExtractor={data=> data.phoneNumbers}
-  ItemSeparatorComponent={this.renderSeparator}
-  ListHeaderComponent={this.renderHeader}
-  ListFooterComponent={this.renderFooter}
-  onRefresh={this.handleRefresh}
-  refreshing={this.state.refreshing}
-  onEndReached={this.handleLoadMore}
-  onEndReachedThreshold={50}*/
-///>
