@@ -15,6 +15,8 @@ import {
   FormInput
 } from 'react-native-elements'
 import {StackNavigator} from 'react-navigation'
+import { connect } from 'react-redux';
+import textChanged from './Actions';
 
 class Screen extends React.Component {
   static navigationOptions = {
@@ -42,14 +44,14 @@ class Screen extends React.Component {
               underlineColor="transparent"
               placeholder="Name"
               returnKeyType="next"
-              onChangeText={(name) =>this.saveData(name)}
+              onChangeText={(name) =>this.onTextChange(name)}
               style={styles.input}/>
             <TextInput
               underlineColor="transparent"
               placeholder="Number"
               keyboardType="phone-pad"
               returnKeyType="go"
-              onChangeText={(number) => this.saveData(number)}
+              onChangeText={(number) => this.onTextChange(number)}
               style={styles.input}/>
               <Button
                   style={styles.buttonContainer}
@@ -89,3 +91,4 @@ const styles = StyleSheet.create({
 });
 
 export default Screen ;
+//export default connect(null, textChanged)(CustomTextInput);

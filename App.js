@@ -144,11 +144,11 @@ displayNumbers = (phoneNumber) => {
   render() {
    console.log(this.state.data);
     return (
-
+/*
       <ListView dataSource={this.state.dataSource} renderRow={this.renderRow.bind(this)}>
 
-      </ListView>
-      /*<FlatList
+      </ListView>*/
+      <FlatList
         data = {this.state.dataSource}
           renderItem = {({item})=>(
             <ListView dataSource={this.state.dataSource} renderRow={this.renderRow.bind(this)}>
@@ -164,7 +164,7 @@ displayNumbers = (phoneNumber) => {
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-*/
+
       /*<View style={{backgroundColor: 'brown', flex:1, marginTop: 10 }}>
           {this.state.data.map(person => this.displayNumbers(person.name))}
       </View>*/
