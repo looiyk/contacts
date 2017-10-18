@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button, ListView, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button, ListView, TouchableOpacity, TouchableHighlight } from 'react-native';
 import {
   StackNavigator,
 } from 'react-navigation';
@@ -83,6 +83,7 @@ import CheckBox from 'react-native-checkbox';
       }
     );
   };
+
   renderSeparator = () => {
     return (
       <View
@@ -135,8 +136,9 @@ import CheckBox from 'react-native-checkbox';
 
 makeRemoteRequest(){
   const {page, seed} = this.state;
-
+  this.setState({refreshing: false});
 }
+
 async showContactListAsync() {
   // Ask for permission to query contacts.
   const permission = await Expo.Permissions.askAsync(Expo.Permissions.CONTACTS);
@@ -180,8 +182,10 @@ change = () => {
       <FlatList
           data={this.state.data}
           renderItem={({item}) =>
+
           <View style={{flex: 1}}>
-            <Text>{ item.name}</Text>
+            <Text>{item.name}</Text>
+
             <View style={{flexDirection: 'row', flex: 1}}>
             <Text>{(item.number) ? item.number: item.phoneNumbers[0].number }</Text>
             <CheckBox
@@ -191,6 +195,7 @@ change = () => {
         />
             </View>
           </View>
+
 
        }
        keyExtractor={data=> data.number || data.phoneNumbers[0].number }
