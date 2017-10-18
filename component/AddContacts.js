@@ -16,7 +16,9 @@ import {
 } from 'react-native-elements'
 import {StackNavigator} from 'react-navigation'
 import { connect } from 'react-redux';
-import textChanged from './Actions';
+//import textChanged from './Actions';
+import {bindActionCreators} from 'redux';
+import * as userActions from '../actions/UserAction';
 
 class Screen extends React.Component {
   static navigationOptions = {
@@ -35,8 +37,32 @@ class Screen extends React.Component {
     this.setState({"Number": number})
   }
 
+  saveDataTest = () => {
+      let obj = {
+        name: this.state.name,
+        number: this.state.number
+      }
+
+      console.log('gettigng previous', this.props.user)
+      let previousUser = [...this.props.user, obj];
+      this.props.action.textChange(previousUser).then(data => {
+          const { navigate } = this.props.navigation;
+          navigate("Home")
+      })
+
+  }
+
+  onChangeName = (value) => {
+      this.setState({name: value})
+  }
+
+  onChangeNumber = (value)=> {
+        this.setState({number: value})
+  }
+
+
   render() {
-    const { navigate } = this.props.navigation;
+
     return (
       <KeyboardAvoidingView behavior = "padding">
       <View style={styles.formContainer}>
@@ -44,18 +70,18 @@ class Screen extends React.Component {
               underlineColor="transparent"
               placeholder="Name"
               returnKeyType="next"
-              onChangeText={(name) =>this.onTextChange(name)}
+              onChangeText={this.onChangeName}
               style={styles.input}/>
             <TextInput
               underlineColor="transparent"
               placeholder="Number"
               keyboardType="phone-pad"
               returnKeyType="go"
-              onChangeText={(number) => this.onTextChange(number)}
+              onChangeText={this.onChangeNumber}
               style={styles.input}/>
               <Button
                   style={styles.buttonContainer}
-                  onPress={() => navigate("Index")}
+                  onPress={this.saveDataTest}
                   title="Add Contacts"
                 />
       </View>
@@ -90,5 +116,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Screen ;
+function mapStateToProps(state, ownProps){
+  return {
+    user: state.user.name
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    action: bindActionCreators(userActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Screen) ;
 //export default connect(null, textChanged)(CustomTextInput);

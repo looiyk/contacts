@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
-import TextReducer from './TextReducer';
+import user from './UserReducer';
 
-export default combineReducers({
+const rootReducers =  combineReducers({
   // the keys here are going to be the property of state that we are producing.
-  text_reducer: TextReducer
-
+    user,
 });
+
+export default rootReducers;
